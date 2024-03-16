@@ -60,10 +60,24 @@ public interface FcmDefinitions {
     String CHANNEL_METHOD_UNSUBSCRIBE_TOPIC = "unsubscribeTopic";
     String CHANNEL_METHOD_DELETE_TOKEN = "deleteToken";
     String CHANNEL_METHOD_SILENCED_CALLBACK = "silentCallbackReference";
+    String CHANNEL_METHOD_SEND_PUSH = "sendPush";
     String CHANNEL_METHOD_DART_CALLBACK = "dartCallbackReference";
     String CHANNEL_METHOD_SHUTDOWN_DART = "shutdown";
+    String CHANNEL_METHOD_SEND_PUSH_TOKEN = "sendPushToken";
+    String CHANNEL_METHOD_SEND_PUSH_TOPIC = "sendPushTopic";
+    String CHANNEL_METHOD_SEND_PUSH_CONDITION = "sendPushCondition";
 
     String NOTIFICATION_MODEL_ANDROID = "Android";
     String NOTIFICATION_MODEL_IOS = "iOS";
+
+    String NOTIFICATION_FCM_OPTIONS = "fcmOptions";
+    String NOTIFICATION_FCM_DRY_RUN = "driRun";
+    String NOTIFICATION_OPTION_APNS = "apns";
+    String NOTIFICATION_OPTION_ANDROID = "android";
+    String NOTIFICATION_OPTION_WEB = "webPush";
+    String NOTIFICATION_OPTION_PRIORITY = "priority";
+
     String NOTIFICATION_FCM_DATA = "data";
+    String CLIENT_EMAIL = "clientEmail";
+    String PRIVATE_KEY = "privateKey";
 }

@@ -218,7 +218,7 @@ public class FcmInterpreter {
                             "[DEMO] "+ notificationModel.content.body;
             }
 
-            receiveNotificationContent(
+            createNotificationContent(
                     context,
                     notificationModel,
                     intent,
@@ -259,19 +259,19 @@ public class FcmInterpreter {
             @NonNull NotificationThreadCompletionHandler completionHandler
     ) throws AwesomeNotificationsException {
         if(AwesomeNotifications.debug)
-            Logger.d(TAG, "New silent push received");
+            Logger.getInstance().d(TAG, "New silent push received");
 
         FcmBroadcaster.SendBroadcastSilentData(context, silentDataModel);
     }
 
-    private static void receiveNotificationContent(
+    private static void createNotificationContent(
             @NonNull Context context,
             @NonNull NotificationModel notificationModel,
             @Nullable Intent originalIntent,
             @NonNull NotificationThreadCompletionHandler completionHandler
     ) throws AwesomeNotificationsException {
         if(AwesomeNotifications.debug)
-            Logger.d(TAG, "New push notification received");
+            Logger.getInstance().d(TAG, "New push notification received");
 
         if(notificationModel.schedule == null)
             NotificationSender
@@ -337,7 +337,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .dismissNotification(context, Integer.parseInt(id));
-            Logger.d(TAG, "Notification id "+id+" dismissed");
+            Logger.getInstance().d(TAG, "Notification id "+id+" dismissed");
         }
     }
 
@@ -351,7 +351,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .dismissNotificationsByChannelKey(context, channel);
-            Logger.d(TAG, "Notifications dismissed by channel "+channel);
+            Logger.getInstance().d(TAG, "Notifications dismissed by channel "+channel);
         }
     }
 
@@ -365,7 +365,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .dismissNotificationsByGroupKey(context, group);
-            Logger.d(TAG, "Notifications dismissed by group "+group);
+            Logger.getInstance().d(TAG, "Notifications dismissed by group "+group);
         }
     }
 
@@ -377,7 +377,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .dismissAllNotifications(context);
-            Logger.d(TAG, "All notifications was dismissed");
+            Logger.getInstance().d(TAG, "All notifications was dismissed");
         }
     }
 
@@ -391,7 +391,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelSchedule(context, Integer.parseInt(id));
-            Logger.d(TAG, "Schedule id "+id+" cancelled");
+            Logger.getInstance().d(TAG, "Schedule id "+id+" cancelled");
         }
     }
 
@@ -405,7 +405,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelSchedulesByChannelKey(context, channel);
-            Logger.d(TAG, "Schedules cancelled by channel "+channel);
+            Logger.getInstance().d(TAG, "Schedules cancelled by channel "+channel);
         }
     }
 
@@ -419,7 +419,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelSchedulesByGroupKey(context, group);
-            Logger.d(TAG, "Schedules cancelled by group "+group);
+            Logger.getInstance().d(TAG, "Schedules cancelled by group "+group);
         }
     }
 
@@ -431,7 +431,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelAllSchedules(context);
-            Logger.d(TAG, "All schedules was cancelled");
+            Logger.getInstance().d(TAG, "All schedules was cancelled");
         }
     }
 
@@ -445,7 +445,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelNotification(context, Integer.parseInt(id));
-            Logger.d(TAG, "Notification id "+id+" cancelled");
+            Logger.getInstance().d(TAG, "Notification id "+id+" cancelled");
         }
     }
 
@@ -459,7 +459,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelNotificationsByChannelKey(context, channel);
-            Logger.d(TAG, "Notifications cancelled by channel "+channel);
+            Logger.getInstance().d(TAG, "Notifications cancelled by channel "+channel);
         }
     }
 
@@ -473,7 +473,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelNotificationsByGroupKey(context, group);
-            Logger.d(TAG, "Notifications cancelled by group "+group);
+            Logger.getInstance().d(TAG, "Notifications cancelled by group "+group);
         }
     }
 
@@ -485,7 +485,7 @@ public class FcmInterpreter {
             CancellationManager
                     .getInstance()
                     .cancelAllNotifications(context);
-            Logger.d(TAG, "All notifications was cancelled");
+            Logger.getInstance().d(TAG, "All notifications was cancelled");
         }
     }
 }

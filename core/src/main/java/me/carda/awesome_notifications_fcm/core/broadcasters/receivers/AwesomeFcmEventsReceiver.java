@@ -7,6 +7,8 @@ import java.util.List;
 
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.exceptions.AwesomeNotificationsException;
+import me.carda.awesome_notifications.core.exceptions.ExceptionCode;
+import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.logs.Logger;
 import me.carda.awesome_notifications.core.utils.StringUtils;
 import me.carda.awesome_notifications_fcm.core.listeners.AwesomeFcmSilentListener;
@@ -50,7 +52,7 @@ public class AwesomeFcmEventsReceiver {
         notificationTokenListeners.add(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
+            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
 
         return this;
     }
@@ -58,7 +60,7 @@ public class AwesomeFcmEventsReceiver {
         notificationTokenListeners.remove(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
+            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
 
         return this;
     }
@@ -70,7 +72,7 @@ public class AwesomeFcmEventsReceiver {
         notificationSilentListeners.add(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
+            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
 
         return this;
     }
@@ -78,7 +80,7 @@ public class AwesomeFcmEventsReceiver {
         notificationSilentListeners.remove(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
+            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
 
         return this;
     }
@@ -86,26 +88,50 @@ public class AwesomeFcmEventsReceiver {
     // ********************************************************
 
     public void addNewFcmTokenEvent(@Nullable String token) {
-        if(AwesomeNotifications.debug && notificationTokenListeners.isEmpty())
-            Logger.e(TAG, "New fcm token event ignored, as there is no listeners waiting for new fcm events");
-
-        for (AwesomeFcmTokenListener listener : notificationTokenListeners)
-            listener.onNewFcmTokenReceived(token);
+        if(AwesomeNotifications.debug && notificationTokenListeners.isEmpty()) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                            "New fcm token event ignored, as there is no listeners waiting for new fcm events",
+                            ExceptionCode.DETAILED_INITIALIZATION_FAILED+".addNewFcmTokenEvent"
+                    );
+        } else {
+            for (AwesomeFcmTokenListener listener : notificationTokenListeners)
+                listener.onNewFcmTokenReceived(token);
+        }
     }
 
     public void addNewNativeTokenEvent(@Nullable String token) {
-        if(AwesomeNotifications.debug && notificationTokenListeners.isEmpty())
-            Logger.e(TAG, "New native token event ignored, as there is no listeners waiting for new fcm events");
-
-        for (AwesomeFcmTokenListener listener : notificationTokenListeners)
-            listener.onNewNativeTokenReceived(token);
+        if(AwesomeNotifications.debug && notificationTokenListeners.isEmpty()){
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                            "New native token event ignored, as there is no listeners waiting for new fcm events",
+                            ExceptionCode.DETAILED_INITIALIZATION_FAILED+".addNewNativeTokenEvent"
+                    );
+        } else {
+            for (AwesomeFcmTokenListener listener : notificationTokenListeners)
+                listener.onNewNativeTokenReceived(token);
+        }
     }
 
     public void addNewSilentDataEvent(SilentDataModel silentData) throws AwesomeNotificationsException {
-        if(AwesomeNotifications.debug && notificationSilentListeners.isEmpty())
-            Logger.e(TAG, "New silent event ignored, as there is no listeners waiting for new fcm events");
-
-        for (AwesomeFcmSilentListener listener : notificationSilentListeners)
-            listener.onNewSilentDataReceived(silentData);
+        if(AwesomeNotifications.debug && notificationSilentListeners.isEmpty()) {
+            ExceptionFactory
+                    .getInstance()
+                    .registerNewAwesomeException(
+                            TAG,
+                            ExceptionCode.CODE_INITIALIZATION_EXCEPTION,
+                            "New silent event ignored, as there is no listeners waiting for new fcm events",
+                            ExceptionCode.DETAILED_INITIALIZATION_FAILED+".addNewSilentDataEvent"
+                    );
+        } else {
+            for (AwesomeFcmSilentListener listener : notificationSilentListeners)
+                listener.onNewSilentDataReceived(silentData);
+        }
     }
 }

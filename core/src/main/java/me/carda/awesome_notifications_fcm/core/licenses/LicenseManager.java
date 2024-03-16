@@ -134,7 +134,7 @@ public final class LicenseManager {
             return false;
         }
         else {
-            Logger.d(TAG, "Awesome FCM License key validated");
+            Logger.getInstance().d(TAG, "Awesome FCM License key validated");
             return true;
         }
     }
@@ -184,15 +184,15 @@ public final class LicenseManager {
         switch (licenseErrorState){
             case expired:
             case singleDoNotMatch:
-                Logger.w(TAG, licenseMessage);
+                Logger.getInstance().w(TAG, licenseMessage);
                 break;
 
             case withoutValidation:
             default:
                 if(isDebuggable) {
-                    Logger.i(TAG, licenseMessage);
+                    Logger.getInstance().i(TAG, licenseMessage);
                 } else {
-                    Logger.e(TAG, licenseMessage);
+                    Logger.getInstance().e(TAG, licenseMessage);
                 }
                 break;
         }

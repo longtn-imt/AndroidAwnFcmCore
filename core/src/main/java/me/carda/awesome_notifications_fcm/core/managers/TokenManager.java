@@ -73,7 +73,7 @@ public class TokenManager {
                             TokenManager
                                     .getInstance()
                                     .setLastToken(token);
-                            Logger.d(TAG, "FCM token successfully registered");
+                            Logger.getInstance().d(TAG, "FCM token successfully registered");
                         }
                         else
                             ExceptionFactory

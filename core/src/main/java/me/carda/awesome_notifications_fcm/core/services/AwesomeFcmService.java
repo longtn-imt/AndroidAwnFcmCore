@@ -43,7 +43,7 @@ public abstract class AwesomeFcmService extends FirebaseMessagingService {
 
     @Override
     public void handleIntent(Intent intent){
-        Logger.d(TAG, "A new Awesome FCM service has started");
+        Logger.getInstance().d(TAG, "A new Awesome FCM service has started");
         try {
             initializeExternalPlugins(this);
             AwesomeNotifications.initialize(this);
@@ -64,7 +64,7 @@ public abstract class AwesomeFcmService extends FirebaseMessagingService {
                         errorMsg = errorMsg + action;
                     }
 
-                    Logger.d("FirebaseMessaging", errorMsg);
+                    Logger.getInstance().d("FirebaseMessaging", errorMsg);
                 }
             } else {
                 this.handleMessageIntent(intent);
@@ -86,7 +86,7 @@ public abstract class AwesomeFcmService extends FirebaseMessagingService {
     /// Called when a new token for the default Firebase project is generated.
     @Override
     public void onNewToken(@NonNull String token) {
-        Logger.d(TAG, "received a new fcm token");
+        Logger.getInstance().d(TAG, "received a new fcm token");
         FcmBroadcaster.SendBroadcastNewFcmToken(token);
     }
 
@@ -131,7 +131,7 @@ public abstract class AwesomeFcmService extends FirebaseMessagingService {
         String fcmMessageId = getMessageIdInString(intent);
 
         if(!StringUtils.getInstance().isNullOrEmpty(fcmMessageId)){
-            Logger.d(TAG, "received a new fcm push (id: "+fcmMessageId+")");
+            Logger.getInstance().d(TAG, "received a new fcm push (id: "+fcmMessageId+")");
 
             if (!this.alreadyReceivedMessage(fcmMessageId))
                 this.passMessageIntentToSdk(intent);
@@ -142,7 +142,7 @@ public abstract class AwesomeFcmService extends FirebaseMessagingService {
         if (TextUtils.isEmpty(messageId)) {
             return false;
         } else if (recentlyReceivedMessageIds.contains(messageId)) {
-            Logger.d(TAG, "Received duplicated message: " + messageId);
+            Logger.getInstance().d(TAG, "Received duplicated message: " + messageId);
             return true;
         } else {
             if (recentlyReceivedMessageIds.size() >= 10) {
@@ -187,7 +187,7 @@ public abstract class AwesomeFcmService extends FirebaseMessagingService {
                 if (messageType.length() != 0) {
                     errorMessage += messageType;
                 }
-                Logger.w(TAG, errorMessage);
+                Logger.getInstance().w(TAG, errorMessage);
         }
     }
 }

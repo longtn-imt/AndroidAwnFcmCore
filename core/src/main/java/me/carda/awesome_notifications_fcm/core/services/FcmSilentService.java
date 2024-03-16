@@ -20,7 +20,7 @@ public class FcmSilentService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull final Intent intent) {
-        Logger.d(TAG, "A new silent background service has started");
+        Logger.getInstance().d(TAG, "A new silent background service has started");
         try {
             Long dartCallbackHandle = getDartCallbackDispatcher(this);
             if (dartCallbackHandle == 0L) {

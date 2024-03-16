@@ -14,9 +14,12 @@ import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.carda.awesome_notifications.core.AwesomeNotifications;
 import me.carda.awesome_notifications.core.AwesomeNotificationsExtension;
@@ -29,8 +32,11 @@ import me.carda.awesome_notifications.core.exceptions.ExceptionFactory;
 import me.carda.awesome_notifications.core.listeners.AwesomeActionEventListener;
 import me.carda.awesome_notifications.core.listeners.AwesomeNotificationEventListener;
 import me.carda.awesome_notifications.core.logs.Logger;
+import me.carda.awesome_notifications.core.models.NotificationModel;
 import me.carda.awesome_notifications.core.models.returnedData.ActionReceived;
 import me.carda.awesome_notifications.core.models.returnedData.NotificationReceived;
+import me.carda.awesome_notifications.core.utils.MapUtils;
+import me.carda.awesome_notifications.core.utils.StringUtils;
 import me.carda.awesome_notifications_fcm.core.background.FcmBackgroundExecutor;
 import me.carda.awesome_notifications_fcm.core.broadcasters.receivers.AwesomeFcmEventsReceiver;
 import me.carda.awesome_notifications_fcm.core.licenses.LicenseManager;
@@ -39,7 +45,9 @@ import me.carda.awesome_notifications_fcm.core.listeners.AwesomeFcmTokenListener
 import me.carda.awesome_notifications_fcm.core.managers.FcmDefaultsManager;
 import me.carda.awesome_notifications_fcm.core.managers.TokenManager;
 import me.carda.awesome_notifications_fcm.core.mocking_google.NotificationAnalytics;
+import me.carda.awesome_notifications_fcm.core.models.FcmOptions;
 import me.carda.awesome_notifications_fcm.core.services.AwesomeFcmService;
+import me.carda.awesome_notifications_fcm.core.services.FcmSenderService;
 import me.carda.awesome_notifications_fcm.core.services.FcmSilentService;
 
 public class AwesomeNotificationsFcm
@@ -138,7 +146,7 @@ public class AwesomeNotificationsFcm
         if (firebaseEnabled) return true;
 
         if (debug)
-            Logger.d(TAG, "Enabling Awesome FCM");
+            Logger.getInstance().d(TAG, "Enabling Awesome FCM");
 
         if (!firebaseEnabled){
             Context context = this.wContext.get();
@@ -156,7 +164,7 @@ public class AwesomeNotificationsFcm
         }
 
         if (debug)
-            Logger.d(TAG, "Awesome FCM "+(firebaseEnabled ? "enabled" : "not enabled"));
+            Logger.getInstance().d(TAG, "Awesome FCM "+(firebaseEnabled ? "enabled" : "not enabled"));
 
         return firebaseEnabled;
     }
@@ -188,7 +196,7 @@ public class AwesomeNotificationsFcm
         isInitialized = true;
 
         if(!isGooglePlayServicesAvailable(context))
-            Logger.i(TAG,"Google play services are not available on this device.");
+            Logger.getInstance().i(TAG,"Google play services are not available on this device.");
 
         TokenManager
                 .getInstance()
@@ -234,7 +242,7 @@ public class AwesomeNotificationsFcm
         FirebaseMessaging
                 .getInstance()
                 .subscribeToTopic(topicReference);
-        Logger.d(TAG, "Subscribed to topic "+topicReference );
+        Logger.getInstance().d(TAG, "Subscribed to topic "+topicReference );
     }
 
     public void unsubscribeOnFcmTopic(
@@ -244,7 +252,7 @@ public class AwesomeNotificationsFcm
         FirebaseMessaging
                 .getInstance()
                 .unsubscribeFromTopic(topicReference);
-        Logger.d(TAG, "Unsubscribed from topic "+topicReference );
+        Logger.getInstance().d(TAG, "Unsubscribed from topic "+topicReference );
     }
 
 
@@ -260,6 +268,8 @@ public class AwesomeNotificationsFcm
 
         // Remote Message ID can be either one of the following...
         Bundle extras = intent.getExtras();
+        if (extras == null) return false;
+
         String messageId = extras.getString("google.message_id");
 
         if (messageId == null) messageId = intent.getExtras().getString("message_id");
@@ -268,7 +278,6 @@ public class AwesomeNotificationsFcm
         String action = intent.getAction();
         NotificationAnalytics.logNotificationOpen(extras);
         NotificationAnalytics.logNotificationOpen(analyticsExtras);
-        return true;
 
 //        if (MessagingAnalytics.shouldUploadScionMetrics(intent) || !StringUtils.isNullOrEmpty(messageId)) {
 //            MessagingAnalytics.logNotificationOpen(intent.getExtras());
@@ -282,7 +291,7 @@ public class AwesomeNotificationsFcm
 //                Log.d(TAG, "Firebase action received");
 //        }
 //
-//        return true;
+        return true;
     }
 
     @Override
@@ -352,6 +361,102 @@ public class AwesomeNotificationsFcm
         TokenManager
                 .getInstance()
                 .setLastToken(null);
+    }
+
+    public boolean sendPushNotificationWithTokens(
+            String projectSenderId,
+            String clientEmail,
+            String privateKeyPem,
+            List<String> tokens,
+            NotificationModel notificationModel,
+            FcmOptions fcmOptions
+    ) throws Exception {
+        Map<String, Object> data = FcmSenderService
+                .getInstance()
+                .buildPushContent(
+                    notificationModel,
+                    fcmOptions.priority
+                );
+
+        Map<String, Object> header = MapUtils.deepMerge(
+            new HashMap<String, Object>() {{
+                put("token", tokens);
+            }},
+            fcmOptions.toMap()
+        );
+
+        return FcmSenderService
+                .getInstance()
+                .sendPushNotification(
+                        projectSenderId,
+                        clientEmail,
+                        privateKeyPem,
+                        MapUtils.deepMerge(data, header)
+                );
+    }
+
+    public boolean sendPushNotificationWithTopics(
+            String projectSenderId,
+            String clientEmail,
+            String privateKeyPem,
+            List<String> topics,
+            NotificationModel notificationModel,
+            FcmOptions fcmOptions
+    ) throws Exception {
+        Map<String, Object> data = FcmSenderService
+                .getInstance()
+                .buildPushContent(
+                    notificationModel,
+                    fcmOptions.priority
+                );
+
+        Map<String, Object> header = MapUtils.deepMerge(
+                new HashMap<String, Object>() {{
+                    put("topic", topics);
+                }},
+                fcmOptions.toMap()
+        );
+
+        return FcmSenderService
+                .getInstance()
+                .sendPushNotification(
+                        projectSenderId,
+                        clientEmail,
+                        privateKeyPem,
+                        MapUtils.deepMerge(data, header)
+                );
+    }
+
+    public boolean sendPushNotificationWithCondition(
+            String projectSenderId,
+            String clientEmail,
+            String privateKeyPem,
+            String condition,
+            NotificationModel notificationModel,
+            FcmOptions fcmOptions
+    ) throws Exception {
+        Map<String, Object> data = FcmSenderService
+                .getInstance()
+                .buildPushContent(
+                    notificationModel,
+                    fcmOptions.priority
+                );
+
+        Map<String, Object> header = MapUtils.deepMerge(
+                new HashMap<String, Object>() {{
+                    put("condition", condition);
+                }},
+                fcmOptions.toMap()
+        );
+
+        return FcmSenderService
+                .getInstance()
+                .sendPushNotification(
+                        projectSenderId,
+                        clientEmail,
+                        privateKeyPem,
+                        MapUtils.deepMerge(data, header)
+                );
     }
 
     public void dispose() {
