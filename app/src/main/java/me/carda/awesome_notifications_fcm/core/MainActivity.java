@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import me.carda.awesome_notifications_fcm.core.example.R;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

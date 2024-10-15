@@ -30,8 +30,8 @@ enum LicenseErrorState {
 
 public final class LicenseManager {
     public final String TAG = "LicenseManager";
-    public final String LIB_VERSION = "0.9.3";
-    public final int LIB_DATE = 20240315;
+    public final String LIB_VERSION = "0.10.0";
+    public final int LIB_DATE = 20241011;
 
     public static LicenseErrorState licenseErrorState = LicenseErrorState.withoutValidation;
 
@@ -66,11 +66,16 @@ public final class LicenseManager {
                 }
 
                 String[] parts = licenseKey.split("==", 2);
+                if (parts.length <= 1) {
+                    licenseErrorState = LicenseErrorState.expired;
+                    continue;
+                }
+
                 String prefix = parts[0];
                 String base64Encoded = parts[1];
 
                 // License keys from year 1
-                if ("".equals(base64Encoded)) {
+                if (base64Encoded.isEmpty()) {
                     licenseErrorState = LicenseErrorState.expired;
                     continue;
                 }

@@ -44,7 +44,7 @@ public class NotificationAnalytics {
         }
     }
 
-    public static void logNotificationOpen(@NonNull Bundle extras) {
+    public static void logNotificationOpen(@Nullable Bundle extras) {
         if(!isValidFcmExtras(extras))
             return;
 

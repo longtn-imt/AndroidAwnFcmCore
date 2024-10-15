@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.messaging.NotificationParams;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -107,7 +106,11 @@ public class FcmNotificationBuilder {
 
             String androidCustomData = remoteData.get(FcmDefinitions.NOTIFICATION_MODEL_ANDROID);
             if (androidCustomData != null) {
-                awesomeAndroid = JsonUtils.fromJson(androidCustomData);
+                JsonUtils<String> jsonUtils = new JsonUtils<>();
+                Object parsed = jsonUtils.fromJson(androidCustomData);
+                if (parsed instanceof Map) {
+                    awesomeAndroid = (Map<String, Object>) parsed;
+                }
             }
         } else {
             awesomeContent = JsonFlattener.decode(remoteData);
@@ -290,7 +293,11 @@ public class FcmNotificationBuilder {
         Map<String, Object> notification = null;
         try {
             if (jsonData != null) {
-                notification = JsonUtils.fromJson(jsonData);
+                JsonUtils<String> jsonUtils = new JsonUtils<>();
+                Object parsed = jsonUtils.fromJson(jsonData);
+                if (parsed instanceof Map) {
+                    notification = (Map<String, Object>) parsed;
+                }
             }
         } catch (Exception exception) {
             throw ExceptionFactory
@@ -313,8 +320,11 @@ public class FcmNotificationBuilder {
         List<Map<String, Object>> list = null;
         try {
             if (jsonData != null) {
-                Type mapType = new TypeToken<List<Map<String, Object>>>(){}.getType();
-                list = new Gson().fromJson(jsonData, mapType);
+                JsonUtils<List> jsonUtils = new JsonUtils<>();
+                Object parsed = jsonUtils.fromJson(jsonData);
+                if (parsed instanceof List){
+                    list = (List<Map<String, Object>>) parsed;
+                }
             }
         } catch (Exception exception) {
             throw ExceptionFactory
@@ -337,8 +347,11 @@ public class FcmNotificationBuilder {
         Map<String, Map<String, Object>> map = null;
         try {
             if (jsonData != null) {
-                Type mapType = new TypeToken<Map<String, Map<String, Object>>>(){}.getType();
-                map = new Gson().fromJson(jsonData, mapType);
+                JsonUtils<Map> jsonUtils = new JsonUtils<>();
+                Object parsed = jsonUtils.fromJson(jsonData);
+                if (parsed instanceof Map){
+                    map = (Map<String, Map<String, Object>>) parsed;
+                }
             }
         } catch (Exception exception) {
             throw ExceptionFactory

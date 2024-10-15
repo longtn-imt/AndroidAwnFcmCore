@@ -218,7 +218,7 @@ public class FcmInterpreter {
                             "[DEMO] "+ notificationModel.content.body;
             }
 
-            receiveNotificationContent(
+            createNotificationContent(
                     context,
                     notificationModel,
                     intent,
@@ -264,7 +264,7 @@ public class FcmInterpreter {
         FcmBroadcaster.SendBroadcastSilentData(context, silentDataModel);
     }
 
-    private static void receiveNotificationContent(
+    private static void createNotificationContent(
             @NonNull Context context,
             @NonNull NotificationModel notificationModel,
             @Nullable Intent originalIntent,
