@@ -363,6 +363,16 @@ public class AwesomeNotificationsFcm
                 .setLastToken(null);
     }
 
+    /**
+     * @deprecated This method is deprecated as FCM upstream messaging
+     * will be decommissioned in June 2024.
+     *
+     * Use a REST API endpoint on your server to handle device-to-server
+     * communication, and send push notifications using the
+     * Firebase Admin SDK from the server side.
+     *
+     * This method will be removed in next releases.
+     */
     public boolean sendPushNotificationWithTokens(
             String projectSenderId,
             String clientEmail,
@@ -395,6 +405,16 @@ public class AwesomeNotificationsFcm
                 );
     }
 
+    /**
+     * @deprecated This method is deprecated as FCM upstream messaging
+     * will be decommissioned in June 2024.
+     *
+     * Use a REST API endpoint on your server to handle device-to-server
+     * communication, and send push notifications using the
+     * Firebase Admin SDK from the server side.
+     *
+     * This method will be removed in next releases.
+     */
     public boolean sendPushNotificationWithTopics(
             String projectSenderId,
             String clientEmail,
@@ -427,6 +447,16 @@ public class AwesomeNotificationsFcm
                 );
     }
 
+    /**
+     * @deprecated This method is deprecated as FCM upstream messaging
+     * will be decommissioned in June 2024.
+     *
+     * Use a REST API endpoint on your server to handle device-to-server
+     * communication, and send push notifications using the
+     * Firebase Admin SDK from the server side.
+     *
+     * This method will be removed in next releases.
+     */
     public boolean sendPushNotificationWithCondition(
             String projectSenderId,
             String clientEmail,

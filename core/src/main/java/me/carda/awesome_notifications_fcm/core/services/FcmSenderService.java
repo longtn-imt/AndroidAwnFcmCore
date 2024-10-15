@@ -13,11 +13,14 @@ package me.carda.awesome_notifications_fcm.core.services;
 //import com.google.api.client.util.Base64;
 
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.security.KeyFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 
+import kotlin.NotImplementedError;
 import me.carda.awesome_notifications.core.models.NotificationModel;
 import me.carda.awesome_notifications.core.utils.JsonUtils;
 import me.carda.awesome_notifications.core.utils.StringUtils;
@@ -39,21 +42,31 @@ public class FcmSenderService {
 
     // ********************************************************
 
-
+    /**
+     * @deprecated This method is deprecated as FCM upstream messaging
+     * will be decommissioned in June 2024.
+     *
+     * Use a REST API endpoint on your server to handle device-to-server
+     * communication, and send push notifications using the
+     * Firebase Admin SDK from the server side.
+     *
+     * This method will be removed in next releases.
+     */
     public boolean sendPushNotification(
             String projectSenderId,
             String clientEmail,
             String privateKeyPem,
             Map<String, Object> data
     ) throws Exception {
-        String BASE_URL = "https://fcm.googleapis.com/v1/projects/" + projectSenderId + "/messages:send";
-        String FCM_JSON = JsonUtils.toJson(data);
-
-        // Convert PEM format private key to PKCS8 format
-        String realPrivateKey = privateKeyPem
-                .replaceAll("-----END PRIVATE KEY-----", "")
-                .replaceAll("-----BEGIN PRIVATE KEY-----", "")
-                .replaceAll("\\s", "");
+        throw new NotImplementedError();
+//        String BASE_URL = "https://fcm.googleapis.com/v1/projects/" + projectSenderId + "/messages:send";
+//        String FCM_JSON = JsonUtils.toJson(data);
+//
+//        // Convert PEM format private key to PKCS8 format
+//        String realPrivateKey = privateKeyPem
+//                .replaceAll("-----END PRIVATE KEY-----", "")
+//                .replaceAll("-----BEGIN PRIVATE KEY-----", "")
+//                .replaceAll("\\s", "");
 
 //        byte[] encoded = Base64.decodeBase64(realPrivateKey);
 //        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
@@ -83,7 +96,7 @@ public class FcmSenderService {
 //        // Send the request
 //        HttpResponse response = request.execute();
 //        return response.getStatusCode() == 200;
-        return true;
+//        return true;
     }
 
     public Map<String, Object> buildPushContent(
