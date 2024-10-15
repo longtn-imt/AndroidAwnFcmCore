@@ -4,13 +4,18 @@ plugins {
 }
 
 group 'me.carda.awesome_notifications_fcm.core'
-version '0.9.3'
+version '0.10.0'
 
 android {
-    compileSdk 34
+    compileSdkVersion = 34
+
+    if (project.android.hasProperty('namespace')) {
+        namespace 'me.carda.awesome_notifications_fcm.core'
+    }
 
     defaultConfig {
-        minSdk 21
+        minSdk 23
+        compileSdk 34
         targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -19,36 +24,46 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         profile {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
+
+        singleVariant('debug') {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
 def firebaseCoreProject = findProject(':firebase_core')
 def getRootProjectExtOrCoreProperty(name, firebaseCoreProject) {
-    if (firebaseCoreProject == null) return '30.3.1'
+    def lastFirebaseBomVersion = '33.4.0'
+    if (firebaseCoreProject == null) return lastFirebaseBomVersion
     if (!rootProject.ext.has('FlutterFire')) return firebaseCoreProject.properties[name]
     if (!rootProject.ext.get('FlutterFire')[name]) return firebaseCoreProject.properties[name]
     if (rootProject.ext.get('FlutterFire').get(name)) return rootProject.ext.get('FlutterFire').get(name)
-    return '30.3.1'
+    return lastFirebaseBomVersion
 }
 
 dependencies {
-    implementation 'me.carda:AndroidAwnCore:[0.9.3, 0.10.0)'
+    implementation 'me.carda:AndroidAwnCore:0.10.0'
 //    implementation project(':awn_core')
 
-    implementation 'com.google.android.gms:play-services-base:18.3.0'
+    implementation 'com.google.android.gms:play-services-base:18.5.0'
 
-    implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.guava:guava:32.1.3-android'
 
     // api firebaseCoreProject
@@ -60,32 +75,32 @@ dependencies {
     // Required for instrumented tests
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
-    testImplementation 'org.mockito:mockito-core:5.1.1'
-    testImplementation 'org.mockito:mockito-inline:5.1.0'
+    testImplementation 'org.mockito:mockito-core:5.3.1'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:core:1.6.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
-    implementation 'androidx.annotation:annotation:1.7.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.annotation:annotation:1.8.2'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
 
 afterEvaluate {
     publishing {
         publications {
             release (MavenPublication) {
-                from components.release
+                from components.findByName('release')
 
                 groupId = 'me.carda'
                 artifactId = 'AwnFcmAndroidCore'
-                version = '0.9.3'
+                version = '0.10.0'
             }
         }
     }
