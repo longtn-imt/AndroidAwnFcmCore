@@ -146,7 +146,7 @@ public class AwesomeNotificationsFcm
         if (firebaseEnabled) return true;
 
         if (debug)
-            Logger.getInstance().d(TAG, "Enabling Awesome FCM");
+            Logger.d(TAG, "Enabling Awesome FCM");
 
         if (!firebaseEnabled){
             Context context = this.wContext.get();
@@ -164,7 +164,7 @@ public class AwesomeNotificationsFcm
         }
 
         if (debug)
-            Logger.getInstance().d(TAG, "Awesome FCM "+(firebaseEnabled ? "enabled" : "not enabled"));
+            Logger.d(TAG, "Awesome FCM "+(firebaseEnabled ? "enabled" : "not enabled"));
 
         return firebaseEnabled;
     }
@@ -196,7 +196,7 @@ public class AwesomeNotificationsFcm
         isInitialized = true;
 
         if(!isGooglePlayServicesAvailable(context))
-            Logger.getInstance().i(TAG,"Google play services are not available on this device.");
+            Logger.i(TAG,"Google play services are not available on this device.");
 
         TokenManager
                 .getInstance()
@@ -242,7 +242,7 @@ public class AwesomeNotificationsFcm
         FirebaseMessaging
                 .getInstance()
                 .subscribeToTopic(topicReference);
-        Logger.getInstance().d(TAG, "Subscribed to topic "+topicReference );
+        Logger.d(TAG, "Subscribed to topic "+topicReference );
     }
 
     public void unsubscribeOnFcmTopic(
@@ -252,7 +252,7 @@ public class AwesomeNotificationsFcm
         FirebaseMessaging
                 .getInstance()
                 .unsubscribeFromTopic(topicReference);
-        Logger.getInstance().d(TAG, "Unsubscribed from topic "+topicReference );
+        Logger.d(TAG, "Unsubscribed from topic "+topicReference );
     }
 
 
