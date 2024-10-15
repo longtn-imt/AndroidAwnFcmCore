@@ -52,7 +52,7 @@ public class AwesomeFcmEventsReceiver {
         notificationTokenListeners.add(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
+            Logger.d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
 
         return this;
     }
@@ -60,7 +60,7 @@ public class AwesomeFcmEventsReceiver {
         notificationTokenListeners.remove(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
+            Logger.d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
 
         return this;
     }
@@ -72,7 +72,7 @@ public class AwesomeFcmEventsReceiver {
         notificationSilentListeners.add(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
+            Logger.d(TAG, listener.getClass().getSimpleName() + " subscribed to receive FCM events");
 
         return this;
     }
@@ -80,7 +80,7 @@ public class AwesomeFcmEventsReceiver {
         notificationSilentListeners.remove(listener);
 
         if(AwesomeNotifications.debug)
-            Logger.getInstance().d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
+            Logger.d(TAG, listener.getClass().getSimpleName() + " unsubscribed from notification events");
 
         return this;
     }
