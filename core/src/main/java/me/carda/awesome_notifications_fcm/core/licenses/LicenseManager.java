@@ -111,7 +111,7 @@ public final class LicenseManager {
             e.printStackTrace();
         }
 
-        return false;
+        return true;
     }
 
     @NonNull
